@@ -575,9 +575,6 @@ function getRandomDelay() {
 - **Timing**: 8-20 seconds between messages = ~24-30 messages per hour
 - **Retry limit**: 2 automatic retries on timeout
 
-## 📝 License
-
-[Add your license information here]
 
 ## 🤝 Support & Contribution
 
