@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Multi-Account Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📱 WhatsApp Multi-Account Manager</h1>
+            <p>Manage multiple WhatsApp Business accounts and send messages</p>
+        </header>
+
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="accounts">Accounts</button>
+            <button class="tab-btn" data-tab="send">Send Message</button>
+            <button class="tab-btn" data-tab="buttons">Send Button Messages</button>
+            <button class="tab-btn" data-tab="csv">📊 CSV Bulk Send</button>
+        </div>
+
+        <!-- ACCOUNTS TAB -->
+        <div id="accounts" class="tab-content active">
+            <div class="section">
+                <h2>Add New Account</h2>
+                <form id="addAccountForm">
+                    <div class="form-group">
+                        <label for="accountName">Account Name:</label>
+                        <input type="text" id="accountName" placeholder="e.g., Main Business" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number:</label>
+                        <input type="text" id="phoneNumber" placeholder="e.g., 923333343164" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Account</button>
+                </form>
+            </div>
+
+            <div class="section">
+                <h2>Your Accounts</h2>
+                <div id="accountsList" class="accounts-list">
+                    <p class="loading">Loading accounts...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEND MESSAGE TAB -->
+        <div id="send" class="tab-content">
+            <div class="section">
+                <h2>Send Message from Account</h2>
+                <form id="sendMessageForm">
+                    <div class="form-group">
+                        <label for="selectAccount">Select Account:</label>
+                        <select id="selectAccount" required>
+                            <option value="">Please select an account...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipientPhone">Recipient Phone Number:</label>
+                        <input type="text" id="recipientPhone" placeholder="e.g., 923333343164" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="messageText">Message:</label>
+                        <textarea id="messageText" placeholder="Type your message here..." required rows="5"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success">Send Message</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- SEND BUTTON MESSAGES TAB -->
+        <div id="buttons" class="tab-content">
+            <div class="section">
+                <h2>📱 Send Interactive Button Messages</h2>
+                <form id="sendButtonMessageForm">
+                    <div class="form-group">
+                        <label for="selectAccountButtons">Select Account:</label>
+                        <select id="selectAccountButtons" required>
+                            <option value="">Please select an account...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipientPhoneButtons">Recipient Phone Number:</label>
+                        <input type="text" id="recipientPhoneButtons" placeholder="e.g., 923333343164" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="buttonMessageBody">Message Body:</label>
+                        <textarea id="buttonMessageBody" placeholder="Enter the main message text..." required rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🔘 Interactive Buttons <span style="color: #666; font-size: 0.9em;">(Add 1-3 buttons)</span></label>
+                        <div id="buttonsContainer" class="buttons-container">
+                            <!-- Buttons will be dynamically added here -->
+                        </div>
+                        <button type="button" id="addButtonBtn" class="btn btn-secondary" style="margin-top: 10px;">+ Add Button</button>
+                    </div>
+
+                    <button type="submit" class="btn btn-success" style="margin-top: 20px;">Send Button Message</button>
+                </form>
+            </div>
+
+            <!-- Preview Section -->
+            <div class="section">
+                <h2>📋 Message Preview</h2>
+                <div id="buttonPreview" class="button-preview">
+                    <p style="color: #666;">Preview will appear here...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CSV BULK SEND TAB -->
+        <div id="csv" class="tab-content">
+            <div class="section">
+                <h2>📊 Bulk Send Messages via CSV</h2>
+                <p style="color: #666; margin-bottom: 15px;">Upload a CSV file with the following columns: Account, Recipient Phone Number, Message Body, Interactive Button 1, Interactive Button 2, Interactive Button 3, Timer (in seconds)</p>
+                
+                <form id="csvUploadForm">
+                    <div class="form-group">
+                        <label for="csvFile">Select CSV File:</label>
+                        <input type="file" id="csvFile" accept=".csv" required>
+                        <small style="color: #666; display: block; margin-top: 5px;">
+                            📋 Example CSV format:
+                            <br>Account,Recipient Phone Number,Message Body,Interactive Button 1,Interactive Button 2,Interactive Button 3,Timer (in seconds)
+                            <br>Main Account,923333343164,Hello! Do you want to connect?,Yes,No,,10
+                            <br>Main Account,923333343165,Hello there!,Click Me,,,0
+                        </small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload & Process CSV</button>
+                </form>
+            </div>
+
+            <!-- Batch Status Section -->
+            <div class="section">
+                <h2>📈 Batch Status</h2>
+                <div id="batchStatusContainer" style="overflow-x: auto;">
+                    <table id="batchStatusTable" style="width: 100%; border-collapse: collapse; display: none;">
+                        <thead>
+                            <tr style="background-color: #f5f5f5; border-bottom: 2px solid #ddd;">
+                                <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Row</th>
+                                <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Account</th>
+                                <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Phone Number</th>
+                                <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Message Preview</th>
+                                <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Timer</th>
+                                <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="batchStatusBody">
+                        </tbody>
+                    </table>
+                    <p id="noBatchMessage" style="color: #999;">No batch processed yet. Upload a CSV file to get started.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for QR Code -->
+    <div id="qrModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>📲 Scan QR Code with WhatsApp</h2>
+            <p id="qrAccountName"></p>
+            <div id="qrContainer" style="text-align: center; padding: 20px;">
+                <img id="qrImage" src="" alt="QR Code" style="max-width: 100%; height: auto; border: 3px solid #25d366; border-radius: 10px; display: none;">
+                <div id="qrLoading" style="padding: 40px;">
+                    <p>⏳ Generating QR code...</p>
+                    <p style="font-size: 0.9em; color: #666;">Check the terminal for QR code display</p>
+                </div>
+            </div>
+            <p class="hint">📱 Use WhatsApp on your phone to scan this QR code and authenticate</p>
+        </div>
+    </div>
+
+    <!-- Alert Messages -->
+    <div id="alert" class="alert"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

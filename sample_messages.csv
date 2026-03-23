@@ -1,0 +1,5 @@
+Account,Recipient Phone Number,Message Body,Interactive Button 1,Interactive Button 2,Interactive Button 3,Timer (in seconds)
+Main Account,92XXXXXXXXXX,Hello?,Yes,No,,10
+Main Account,92XXXXXXXXXX,Hi friend,View Deal,Share,,5
+Main Account,92XXXXXXXXXX,This is test message,Good,Bad,Neutral,0
+Business Account,92XXXXXXXXXX,Testing,Hey friend,Testing,,0
